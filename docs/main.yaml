@@ -1,0 +1,131 @@
+openapi: 3.1.1
+info:
+  title: Movie API
+  version: '1.0'
+  description: API to manage movies in the database, with endpoints to add, update, delete, and fetch movie data.
+
+servers:
+  - url: https://supreme-yodel-pw5wvv4qpj43r7pq-3000.app.github.dev
+    description: Main server running the Movie API
+
+paths:
+  /movies:
+    get:
+      summary: Get all movies
+      description: Retrieves a list of all movies from the database.
+      operationId: getMovies
+      responses:
+        '200':
+          description: A list of movies
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      description: The ID of the movie
+                    name:
+                      type: string
+                      description: The title of the movie
+                    release_date:
+                      type: string
+                      format: date
+                      description: The release date of the movie
+                    genre:
+                      type: string
+                      description: The genre(s) of the movie
+        '500':
+          description: Failed to fetch movies
+
+    post:
+      summary: Add a new movie
+      description: Adds a new movie to the database.
+      operationId: addMovie
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The title of the movie
+                release_date:
+                  type: string
+                  format: date
+                  description: The release date of the movie
+                genre:
+                  type: string
+                  description: The genre(s) of the movie
+      responses:
+        '200':
+          description: Movie successfully added
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Confirmation message
+                  id:
+                    type: integer
+                    description: ID of the added movie
+        '500':
+          description: Failed to add movie
+
+  /movies/{id}:
+    put:
+      summary: Update a movie
+      description: Updates the details of a specific movie by its ID.
+      operationId: updateMovie
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the movie to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The title of the movie
+                release_date:
+                  type: string
+                  format: date
+                  description: The release date of the movie
+                genre:
+                  type: string
+                  description: The genre(s) of the movie
+      responses:
+        '200':
+          description: Movie successfully updated
+        '500':
+          description: Failed to update movie
+
+    delete:
+      summary: Delete a movie
+      description: Deletes a specific movie from the database by its ID.
+      operationId: deleteMovie
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the movie to delete
+      responses:
+        '200':
+          description: Movie successfully deleted
+        '500':
+          description: Failed to delete movie
